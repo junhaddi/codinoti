@@ -1,22 +1,16 @@
-/*
-Give the service worker access to Firebase Messaging.
-Note that you can only use Firebase Messaging here, other Firebase libraries are not available in the service worker.
-*/
+// 서비스워커에 Firebase 라이브러리 불러오기.
 importScripts("https://www.gstatic.com/firebasejs/4.13.0/firebase-app.js");
 importScripts(
   "https://www.gstatic.com/firebasejs/4.13.0/firebase-messaging.js"
 );
 
-/*
-Initialize the Firebase app in the service worker by passing in the messagingSenderId.
-*/
+// Firebase 클라우드 메시징 발신자 ID.
+// 프로젝트 생성 -> 설정(톱니바퀴) -> 클라우드 메시징 텝에 있는 값.
 firebase.initializeApp({
   messagingSenderId: "188505041022"
 });
 
-/*
-Retrieve an instance of Firebase Messaging so that it can handle background messages.
-*/
+// 백그라운드 메시지 수신
 const messaging = firebase.messaging();
 messaging.setBackgroundMessageHandler(function(payload) {
   console.log(
@@ -24,7 +18,6 @@ messaging.setBackgroundMessageHandler(function(payload) {
     payload
   );
   const notification = JSON.parse(payload.data.notification);
-  // Customize notification here
   const notificationTitle = notification.title;
   const notificationOptions = {
     body: notification.body,

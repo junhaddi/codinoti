@@ -2,44 +2,65 @@
 <html>
 
 <head>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-messaging.js"></script>
     <script>
+        // Firebase 클라우드 메시징 발신자 ID.
+        // 프로젝트 생성 -> 설정(톱니바퀴) -> 클라우드 메시징 텝에 있는 값.
         firebase.initializeApp({
-            'messagingSenderId': '188505041022'
+            "messagingSenderId": "188505041022"
         })
         const messaging = firebase.messaging();
-        function initFirebaseMessagingRegistration() {
-            messaging
-                .requestPermission()
-                .then(function () {
-                    messageElement.innerHTML = "Got notification permission";
-                    console.log("Got notification permission");
-                    return messaging.getToken();
-                })
-                .then(function (token) {
-                    // print the token on the HTML page
-                    tokenElement.innerHTML = "Token is " + token;
-                })
-                .catch(function (err) {
-                    errorElement.innerHTML = "Error: " + err;
-                    console.log("Didn't get notification permission", err);
-                });
-        }
-        messaging.onMessage(function (payload) {
-            console.log("Message received. ", JSON.stringify(payload));
-            notificationElement.innerHTML = notificationElement.innerHTML + " " + payload.data.notification;
-        });
+
+        // 토큰 발급
+        messaging.requestPermission()
+            .then(function () {
+                console.log("알림권한 획득!");
+                return messaging.getToken();
+            })
+            .then(function (token) {
+                tokenElement.innerHTML = token;
+                submitToken(token);
+            })
+            .catch(function (err) {
+                errorElement.innerHTML = "Error: " + err;
+                console.log("알람권환 획득 실패ㅜㅜ", err);
+            });
+
+        // 토큰 갱신발급
         messaging.onTokenRefresh(function () {
             messaging.getToken()
                 .then(function (refreshedToken) {
-                    console.log('Token refreshed.');
-                    tokenElement.innerHTML = "Token is " + refreshedToken;
+                    console.log("토큰 갱신발급!!!");
+                    tokenElement.innerHTML = refreshedToken;
+                    submitToken(refreshedToken);
                 }).catch(function (err) {
                     errorElement.innerHTML = "Error: " + err;
-                    console.log('Unable to retrieve refreshed token ', err);
+                    console.log("토큰 갱신발급 실패ㅜㅜ", err);
                 });
         });
+
+        // 포그라운드 메시지 수신처리
+        messaging.onMessage(function (payload) {
+            console.log("Message received. ", JSON.stringify(payload));
+            notificationElement.innerHTML = notificationElement.innerHTML + " " + payload.data.title;
+        });
+
+        // 서버로 토큰 보내기
+        function submitToken(token) {
+            $.ajax({
+                url: "/token",
+                dataType: "json",
+                type: "POST",
+                data: { "token": token },
+                success: function (result) {
+                    if (result) {
+                        console.log(result);
+                    }
+                }
+            })
+        }
     </script>
 </head>
 
@@ -50,11 +71,9 @@
     <div id="notification" style="color:green"></div>
     <div id="error" style="color:red"></div>
     <script>
-        messageElement = document.getElementById("message")
-        tokenElement = document.getElementById("token")
-        notificationElement = document.getElementById("notification")
-        errorElement = document.getElementById("error")
+        tokenElement = document.getElementById("token");
+        notificationElement = document.getElementById("notification");
+        errorElement = document.getElementById("error");
     </script>
-    <button onclick="initFirebaseMessagingRegistration()">Enable Firebase Messaging</button>
 
 </html>
