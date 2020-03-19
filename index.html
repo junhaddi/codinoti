@@ -41,10 +41,9 @@
                 });
         });
 
-        // 포그라운드 메시지 수신처리
+        // 메시지 수신처리
         messaging.onMessage(function (payload) {
-            console.log("Message received. ", JSON.stringify(payload));
-            notificationElement.innerHTML = notificationElement.innerHTML + " " + payload.data.title;
+            $(".container").prepend(`<div class='feed'><h3 class='name'>${payload.data.title}</h3><div class='date'>${payload.data.date}</div><div class='content'>${payload.data.content}</div></div>`);
         });
 
         // 서버로 토큰 보내기
@@ -62,18 +61,114 @@
             })
         }
     </script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #d7d8dc;
+            padding-top: 75px;
+            padding-bottom: 70px;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 75px;
+            color: #fff;
+            background-color: #475d9f;
+            border-bottom: 1px solid #2c3863;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            text-align: center;
+            color: #fff;
+            background-color: #808080;
+            border-top: 1px solid #2c3863;
+        }
+
+        .title {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 15px;
+            text-align: center;
+        }
+
+        .adminBtn {
+            position: absolute;
+            left: 10px;
+        }
+
+        .downloadBtn {
+            position: absolute;
+            right: 10px;
+        }
+
+        .container {
+            background-color: #d7d8dc;
+        }
+
+        .feed {
+            background-color: #ffffff;
+            border-top: 1px solid #c0c0c0;
+            border-bottom: 1px solid #c0c0c0;
+            margin: 10px;
+            padding: 16px;
+            box-shadow: 10px 10px 10px grey;
+        }
+
+        .date {
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            color: #6184dd;
+            font-weight: 600;
+        }
+    </style>
+    <title>[사용자] 코디알리미</title>
 </head>
 
 <body>
-    <h1>This is a test page</h1>
-    <div id="token" style="color:lightblue"></div>
-    <div id="message" style="color:lightblue"></div>
-    <div id="notification" style="color:green"></div>
-    <div id="error" style="color:red"></div>
+    <header>
+        <div class="adminBtn">
+            <a href="admin.html">관리자</a>
+        </div>
+        <div class="title">
+            <h1>코디알리미</h1>
+        </div>
+        <div class="downloadBtn">
+            다운로드
+        </div>
+    </header>
+    <footer>
+        <h3 style="margin-top: 12px;">▣준하왕국학교</h3>
+        <h4 style="margin-top: 6px;">@CODIMASTER.</h4>
+    </footer>
+    <div class="feed" style="margin-bottom: 30px;">
+        <h3 class="name">🔥코디알리미 데모 버전입니다🔥</h3>
+        <div>소스코드: <a href="https://github.com/">https://github.com/</a></div>
+        <div>문의: rkdwnsgk05@gmail.com</div>
+        <div id="token" style="color:deepskyblue;"></div>
+        <div id="error" style="color:red;"></div>
+    </div>
+    <div class="container"></div>
     <script>
         tokenElement = document.getElementById("token");
-        notificationElement = document.getElementById("notification");
         errorElement = document.getElementById("error");
     </script>
+</body>
 
 </html>

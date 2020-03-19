@@ -10,36 +10,38 @@ var app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
+app.use(express.static("img"));
 
+// 라우팅 처리
 app.get("/", function(req, res) {
-  res.sendFile(__dirname + "/" + "index.html");
+  res.sendFile(__dirname + "/index.html");
+});
+
+app.get("/admin.html", function(req, res) {
+  res.sendFile(__dirname + "/admin.html");
 });
 
 app.post("/token", function(req, res) {
   var data = req.body.token;
-  tokenList.push(data);
-  console.log(`token register: ${data}`);
+  if (tokenList.indexOf(data) == -1) {
+    tokenList.push(data);
+    console.log(`token register: ${data}`);
+  }
   res.send({ result: "submit token" });
 });
 
-var server = app.listen(8000, function() {
-  var port = server.address().port;
-  console.log(`app listening on port ${port}`);
-});
-
-// 푸시 메시지
-var tokenList = [];
-
-setInterval(function() {
+app.post("/pushMessage", function(req, res) {
+  var data = req.body;
   if (tokenList.length > 0) {
     var message = {
       notification: {
-        body: "Background Message",
-        title: "BG Title"
+        title: data.title,
+        body: data.content
       },
       data: {
-        title: "FG Title",
-        message: "Foreground Message"
+        title: data.title,
+        date: data.date,
+        content: data.content
       },
       tokens: tokenList
     };
@@ -50,4 +52,16 @@ setInterval(function() {
         console.log(response.successCount + " messages were sent successfully");
       });
   }
-}, 3000);
+  console.log("push message");
+  res.send({ result: "push message" });
+});
+
+// 서버 실행
+var server = app.listen(8000, function() {
+  var port = server.address().port;
+  console.log(`server listening on port ${port}`);
+});
+
+// 데이터 배열
+// DB 붙이면 코드 복잡해짐
+var tokenList = [];
