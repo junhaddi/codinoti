@@ -10,15 +10,10 @@ var app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
-app.use(express.static("img"));
 
 // 라우팅 처리
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/index.html");
-});
-
-app.get("/admin.html", function(req, res) {
-  res.sendFile(__dirname + "/admin.html");
 });
 
 app.post("/token", function(req, res) {

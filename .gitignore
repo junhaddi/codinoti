@@ -1,6 +1,15 @@
 
-# Created by https://www.gitignore.io/api/node
-# Edit at https://www.gitignore.io/?templates=node
+# Created by https://www.gitignore.io/api/node,firebase
+# Edit at https://www.gitignore.io/?templates=node,firebase
+
+### Firebase ###
+.idea
+**/node_modules/*
+**/.firebaserc
+
+### Firebase Patch ###
+.runtimeconfig.json
+.firebase/
 
 ### Node ###
 # Logs
@@ -108,4 +117,4 @@ dist/
 tmp/
 temp/
 
-# End of https://www.gitignore.io/api/node
+# End of https://www.gitignore.io/api/node,firebase

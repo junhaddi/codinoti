@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="scripts/jquery-3.4.1.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-messaging.js"></script>
     <script>
@@ -138,7 +138,19 @@
             font-weight: 600;
         }
     </style>
-    <title>[사용자] 코디알리미</title>
+    <title>코디알리미</title>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <!-- manifest 추가 -->
+    <link rel="manifest" href="manifest.json" />
+    <!-- iOS 설정 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="codinoti" />
+    <link rel="apple-touch-icon" href="/images/icons/icon-152x152.png" />
+    <!-- 메타데이터 설정 -->
+    <meta name="description" content="코디알리미" />
+    <meta name="theme-color" content="#475d9f" />
 </head>
 
 <body>
@@ -149,7 +161,7 @@
         <div class="title">
             <h1>코디알리미</h1>
         </div>
-        <div class="downloadBtn">
+        <div id="install" class="downloadBtn">
             다운로드
         </div>
     </header>
@@ -159,7 +171,7 @@
     </footer>
     <div class="feed" style="margin-bottom: 30px;">
         <h3 class="name">🔥코디알리미 데모 버전입니다🔥</h3>
-        <div>소스코드: <a href="https://github.com/">https://github.com/</a></div>
+        <div>소스코드: <a href="https://github.com/junhaddi/codinoti">https://github.com/junhaddi/codinoti</a></div>
         <div>문의: rkdwnsgk05@gmail.com</div>
         <div id="token" style="color:deepskyblue;"></div>
         <div id="error" style="color:red;"></div>
@@ -168,6 +180,22 @@
     <script>
         tokenElement = document.getElementById("token");
         errorElement = document.getElementById("error");
+    </script>
+    <script src="scripts/install.js"></script>
+    <script>
+        // 서비스 워커 등록
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("/sw.js")
+                    .then(reg => {
+                        console.log("서비스 워커가 등록되었습니다.", reg);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            });
+        }
     </script>
 </body>
 
