@@ -1,8 +1,8 @@
 {
   "name": "codinoti",
   "short_name": "codinoti",
-  "theme_color": "#2c3863",
-  "background_color": "#475d9f",
+  "theme_color": "#ffffff",
+  "background_color": "#6184dd",
   "display": "standalone",
   "Scope": "/",
   "start_url": "/",
