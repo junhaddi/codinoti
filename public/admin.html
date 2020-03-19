@@ -4,16 +4,17 @@
 <head>
   <script src="scripts/jquery-3.4.1.min.js"></script>
   <title>관리자 페이지</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
   <h1>관리자 페이지</h1>
   <form>
     <p>
-      제목 : <input id="title" type="text" size="100" value="준하왕국학교 코로나19 공지 안내장" />
+      제목 : <input id="title" type="text" size="32" value="준하왕국학교 코로나19 공지 안내장" />
     </p>
     <p>
-      내용 : <input id="content" type="text" size="100" value="학교 2주 추가연기" />
+      내용 : <input id="content" type="text" size="32" value="학교 2주 추가연기" />
     </p>
     <p>
       <input id="pushButton" type="button" value="글올리기 뿅뿅♥" />
@@ -21,13 +22,14 @@
   </form>
   <script>
     $("#pushButton").click(function () {
+      var d = new Date();
       $.ajax({
         url: "/pushMessage",
         dataType: "json",
         type: "POST",
         data: {
           title: $("#title").val(),
-          date: Date(),
+          date: `${d.getFullYear()}년 ${d.getMonth()}월 ${d.getDay()}일`,
           content: $("#content").val()
         },
         success: function (result) {
