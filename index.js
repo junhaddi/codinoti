@@ -51,6 +51,15 @@ app.post("/pushMessage", function(req, res) {
   res.send({ result: "push message" });
 });
 
+// HTTPS 리다이렉트
+app.use(function(req, res, next) {
+  if (!req.secure) {
+    res.redirect("https://" + req.headers.host + req.url);
+  } else {
+    next();
+  }
+});
+
 // 서버 실행
 var port = process.env.PORT || 8000;
 var server = app.listen(port, function() {

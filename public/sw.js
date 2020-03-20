@@ -4,7 +4,12 @@ const CACHE_NAME = "static-cache-v1";
 const DATA_CACHE_NAME = "data-cache-v1";
 
 // 캐시 파일 목록
-const FILES_TO_CACHE = ["/", "/index.html", "/offline.html", "/scripts/install.js"];
+const FILES_TO_CACHE = [
+  "/",
+  "/index.html",
+  "/offline.html",
+  "/scripts/install.js"
+];
 
 self.addEventListener("install", evt => {
   console.log("[ServiceWorker] Install");
