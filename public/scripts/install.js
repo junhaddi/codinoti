@@ -25,8 +25,8 @@ function installPWA(evt) {
   });
 }
 
-// 로그 메시지 출력
+// 앱 설치 완료 로그 출력
 window.addEventListener("appinstalled", logAppInstalled);
 function logAppInstalled(evt) {
-  console.log("Weather App was installed.", evt);
+  console.log("앱 설치가 완료되었습니다", evt);
 }

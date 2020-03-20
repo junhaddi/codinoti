@@ -18,18 +18,28 @@ app.get("/", function(req, res) {
   res.sendFile(__dirname + "/index.html");
 });
 
+app.get("/contents", function(req, res) {
+  var data = req.query.school;
+  res.send(contents);
+});
+
 app.post("/token", function(req, res) {
   var data = req.body.token;
-  if (tokenList.indexOf(data) == -1) {
-    tokenList.push(data);
+  if (tokens.indexOf(data) == -1) {
+    tokens.push(data);
     console.log(`token register: ${data}`);
   }
   res.send({ result: "submit token" });
 });
 
-app.post("/pushMessage", function(req, res) {
+app.post("/push", function(req, res) {
   var data = req.body;
-  if (tokenList.length > 0) {
+  contents.push({
+    title: data.title,
+    date: data.date,
+    content: data.content
+  });
+  if (tokens.length > 0) {
     var message = {
       notification: {
         title: data.title,
@@ -40,7 +50,7 @@ app.post("/pushMessage", function(req, res) {
         date: data.date,
         content: data.content
       },
-      tokens: tokenList
+      tokens: tokens
     };
     admin
       .messaging()
@@ -49,7 +59,6 @@ app.post("/pushMessage", function(req, res) {
         console.log(response.successCount + " messages were sent successfully");
       });
   }
-  console.log("push message");
   res.send({ result: "push message" });
 });
 
@@ -59,6 +68,7 @@ var server = app.listen(port, function() {
   console.log(`server listening on port ${port}`);
 });
 
-// 데이터 배열
-// DB 붙이면 코드 복잡해짐
-var tokenList = [];
+// 데이터 임시저장 배열
+// 차후 DB 연동 바람
+var tokens = [];
+var contents = [];

@@ -8,10 +8,7 @@
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
     <!-- 구글 웹폰트 불러오기 -->
-    <link
-      href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap&subset=korean"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap&subset=korean" rel="stylesheet" />
     <!-- manifest 추가 -->
     <link rel="manifest" href="manifest.json" />
     <!-- iOS 설정 -->
@@ -27,25 +24,23 @@
     <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-messaging.js"></script>
     <script>
       // 파이어베이스 프로젝트 ID
-      firebase.initializeApp({
-        messagingSenderId: "188505041022"
-      });
+      firebase.initializeApp({ messagingSenderId: "188505041022" });
       const messaging = firebase.messaging();
 
       // 토큰 발급
       messaging
         .requestPermission()
         .then(function() {
-          console.log("알림권한 획득.");
+          console.log("알림권한 획득");
           return messaging.getToken();
         })
         .then(function(token) {
-          tokenElement.innerHTML = token;
+          $("#token").html(token);
           submitToken(token);
         })
         .catch(function(err) {
-          errorElement.innerHTML = err;
-          console.log("토큰 발급 실패.", err);
+          $("#error").html(err);
+          console.log("토큰 발급 실패", err);
         });
 
       // 토큰 갱신발급
@@ -53,21 +48,32 @@
         messaging
           .getToken()
           .then(function(refreshedToken) {
-            console.log("토큰 갱신발급.");
-            tokenElement.innerHTML = refreshedToken;
+            console.log("토큰 갱신발급");
+            $("#token").html(refreshedToken);
             submitToken(refreshedToken);
           })
           .catch(function(err) {
-            errorElement.innerHTML = err;
-            console.log("토큰 갱신발급 실패.", err);
+            $("#error").html(err);
+            console.log("토큰 갱신발급 실패", err);
           });
       });
 
-      // 메시지 수신처리
+      // 푸시알림 처리
       messaging.onMessage(function(payload) {
-        $(".container").prepend(
-          `<div class='feed'><h3 class='name'>${payload.data.title}</h3><p class='date'>${payload.data.date}</p><p class='content'>${payload.data.content}</p></div>`
-        );
+        addContainer(payload.data);
+      });
+
+      // 서버에서 콘텐츠(계시글) 가져오기
+      $.ajax({
+        url: "/contents",
+        dataType: "json",
+        type: "GET",
+        data: { school: "준하왕국학교" },
+        success: function(result) {
+          result.forEach(function(data) {
+            addContainer(data);
+          });
+        }
       });
 
       // 서버로 토큰 보내기
@@ -83,6 +89,13 @@
             }
           }
         });
+      }
+
+      // 컨테이너 추가
+      function addContainer(data) {
+        $(".container").prepend(
+          `<div class='feed'><h3 class='name'>${data.title}</h3><p class='date'>${data.date}</p><p class='content'>${data.content}</p></div>`
+        );
       }
     </script>
     <style>
@@ -140,7 +153,6 @@
       }
     </style>
   </head>
-
   <body>
     <header>
       <h1>코디알리미</h1>
@@ -151,24 +163,12 @@
     </header>
     <div class="feed" style="margin-bottom: 30px;">
       <h3>🔥코디알리미 데모 버전입니다🔥</h3>
-      <p>
-        소스코드:
-        <a href="https://github.com/junhaddi/codinoti"
-          >https://github.com/junhaddi/codinoti</a
-        >
-      </p>
+      <p>소스코드: <a href="https://github.com/junhaddi/codinoti">https://github.com/junhaddi/codinoti</a></p>
       <p>문의: rkdwnsgk05@gmail.com</p>
-      <p
-        id="token"
-        style="color:#6184dd; font-weight: bold; word-break: break-all;"
-      ></p>
+      <p id="token" style="color:#6184dd; font-weight: bold; word-break: break-all;"></p>
       <p id="error" style="color:red;"></p>
     </div>
     <div class="container"></div>
-    <script>
-      tokenElement = document.getElementById("token");
-      errorElement = document.getElementById("error");
-    </script>
     <script src="scripts/install.js"></script>
     <script>
       // 서비스 워커 등록
@@ -177,7 +177,7 @@
           navigator.serviceWorker
             .register("/sw.js")
             .then(reg => {
-              console.log("서비스 워커가 등록되었습니다.", reg);
+              console.log("서비스 워커가 등록되었습니다", reg);
             })
             .catch(error => {
               console.log(error);

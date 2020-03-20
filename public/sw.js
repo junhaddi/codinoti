@@ -4,12 +4,7 @@ const CACHE_NAME = "static-cache-v2";
 const DATA_CACHE_NAME = "data-cache-v1";
 
 // 캐시 파일 목록
-const FILES_TO_CACHE = [
-  "/",
-  "/index.html",
-  "/offline.html",
-  "/scripts/install.js"
-];
+const FILES_TO_CACHE = ["/", "/index.html", "/offline.html", "/scripts/install.js"];
 
 self.addEventListener("install", evt => {
   console.log("[ServiceWorker] Install");
@@ -25,7 +20,7 @@ self.addEventListener("install", evt => {
 
 self.addEventListener("activate", evt => {
   console.log("[ServiceWorker] Activate");
-  // 캐시에서 오래된 데이터 삭제(CACHE_NAME 변수 변경되야 적용합니다)
+  // 캐시에서 오래된 데이터 삭제(CACHE_NAME 변수를 변경해야 작동합니다)
   evt.waitUntil(
     caches.keys().then(keyList => {
       return Promise.all(

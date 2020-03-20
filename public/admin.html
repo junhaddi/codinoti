@@ -10,22 +10,9 @@
   <body>
     <h1>관리자 페이지</h1>
     <form>
-      <p>
-        제목 :
-        <input
-          id="title"
-          type="text"
-          size="32"
-          value="준하왕국학교 코로나19 공지 안내장"
-        />
-      </p>
-      <p>
-        내용 :
-        <input id="content" type="text" size="32" value="학교 2주 추가연기" />
-      </p>
-      <p>
-        <input id="pushButton" type="button" value="글올리기 뿅♥" />
-      </p>
+      <p>제목: <input id="title" type="text" size="32" value="준하왕국학교 코로나19 공지 안내장" /></p>
+      <p>내용: <input id="content" type="text" size="32" value="학교 2주 추가연기" /></p>
+      <p><input id="pushButton" type="button" value="글올리기 뿅♥" /></p>
     </form>
     <script>
       $("#pushButton").click(function() {
@@ -33,12 +20,12 @@
         // 차후 서버에서 인증처리 바람
         var d = new Date();
         $.ajax({
-          url: "/pushMessage",
+          url: "/push",
           dataType: "json",
           type: "POST",
           data: {
             title: $("#title").val(),
-            date: `${d.getFullYear()}년 ${d.getMonth()}월 ${d.getDay()}일`,
+            date: `${d.getFullYear()}년 ${d.getMonth()}월 ${d.getDay()}일 ${d.getHours()}:${d.getMinutes()}`,
             content: $("#content").val()
           },
           success: function(result) {
