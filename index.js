@@ -52,8 +52,8 @@ app.post("/pushMessage", function(req, res) {
 });
 
 // 서버 실행
-var server = app.listen(8000, function() {
-  var port = server.address().port;
+var port = process.env.PORT || 8000;
+var server = app.listen(port, function() {
   console.log(`server listening on port ${port}`);
 });
 
