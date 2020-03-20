@@ -6,7 +6,9 @@ admin.initializeApp({
 });
 
 var express = require("express");
+var redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
 var app = express();
+app.use(redirectToHTTPS([/localhost:(\d{4})/], [/\/insecure/], 301));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
@@ -49,19 +51,6 @@ app.post("/pushMessage", function(req, res) {
   }
   console.log("push message");
   res.send({ result: "push message" });
-});
-
-// HTTPS 리다이렉트
-app.all("*", (req, res, next) => {
-  let protocol = req.headers["x-forwarded-proto"] || req.protocol;
-  if (protocol == "https") {
-    next();
-  } else {
-    let from = `${protocol}://${req.hostname}${req.url}`;
-    let to = `https://'${req.hostname}${req.url}`;
-    console.log(`[${req.method}]: ${from} -> ${to}`);
-    res.redirect(to);
-  }
 });
 
 // 서버 실행
