@@ -52,11 +52,15 @@ app.post("/pushMessage", function(req, res) {
 });
 
 // HTTPS 리다이렉트
-app.use(function(req, res, next) {
-  if (!req.secure) {
-    res.redirect("https://" + req.headers.host + req.url);
-  } else {
+app.all("*", (req, res, next) => {
+  let protocol = req.headers["x-forwarded-proto"] || req.protocol;
+  if (protocol == "https") {
     next();
+  } else {
+    let from = `${protocol}://${req.hostname}${req.url}`;
+    let to = `https://'${req.hostname}${req.url}`;
+    console.log(`[${req.method}]: ${from} -> ${to}`);
+    res.redirect(to);
   }
 });
 
