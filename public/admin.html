@@ -18,11 +18,13 @@
             내용 : <input id="content" type="text" size="32" value="학교 2주 추가연기" />
         </p>
         <p>
-            <input id="pushButton" type="button" value="글올리기 뿅뿅♥" />
+            <input id="pushButton" type="button" value="글올리기 뿅♥" />
         </p>
     </form>
     <script>
         $("#pushButton").click(function () {
+            // 클라이언트 변조 위험있음!
+            // 차후 서버에서 인증처리 바람
             var d = new Date();
             $.ajax({
                 url: "/pushMessage",

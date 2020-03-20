@@ -4,11 +4,11 @@ const CACHE_NAME = "static-cache-v1";
 const DATA_CACHE_NAME = "data-cache-v1";
 
 // 캐시 파일 목록
-const FILES_TO_CACHE = ["/", "/index.html", "/offline.html"];
+const FILES_TO_CACHE = ["/", "/index.html", "/offline.html", "/scripts/install.js"];
 
 self.addEventListener("install", evt => {
   console.log("[ServiceWorker] Install");
-  // 파일 캐싱
+  // 파일 캐싱 작업
   evt.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       console.log("[ServiceWorker] Pre-caching offline page");
@@ -20,7 +20,7 @@ self.addEventListener("install", evt => {
 
 self.addEventListener("activate", evt => {
   console.log("[ServiceWorker] Activate");
-  // 캐시에서 오래된 데이터 삭제(CACHE_NAME 변수 변경해야지 적용)
+  // 캐시에서 오래된 데이터 삭제(CACHE_NAME 변수 변경되야 적용합니다)
   evt.waitUntil(
     caches.keys().then(keyList => {
       return Promise.all(
@@ -38,10 +38,10 @@ self.addEventListener("activate", evt => {
 
 self.addEventListener("fetch", evt => {
   console.log("[ServiceWorker] Fetch", evt.request.url);
-  // 패치 실패시 오프라인 모드
   if (evt.request.mode !== "navigate") {
     return;
   }
+  // 오프라인 페이지 열기
   evt.respondWith(
     fetch(evt.request).catch(() => {
       return caches.open(CACHE_NAME).then(cache => {
